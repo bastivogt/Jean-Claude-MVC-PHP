@@ -10,7 +10,9 @@ class HomeController {
     }
 
     public function contact() {
-        return "HomeController@contact";
+        return view("home/contact", [
+            "title" => "HomeController#contact"
+        ]);
     }
 
     public function hello($name) {

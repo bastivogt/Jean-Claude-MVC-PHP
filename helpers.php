@@ -7,7 +7,8 @@
  * @param strimg $path
  * @return string
  */
-function basePath($path = "") {
+function basePath($path = "")
+{
     return __DIR__ . "/" . $path;
 }
 
@@ -18,13 +19,16 @@ function basePath($path = "") {
  * @param string $name
  * @return void
  */
-function view($name, $context = []) {
+function view(string $name, array $context = []): void
+{
     $file = basePath("app/views/$name.view.php");
-    if(file_exists($file)) {
+    if (file_exists($file)) {
+        ob_start();
         extract($context);
         require $file;
-
-    }else {
+        $tpl = ob_get_clean();
+        echo $tpl;
+    } else {
         echo "View '$name' not found";
     }
 }
@@ -36,11 +40,12 @@ function view($name, $context = []) {
  * @param string $name
  * @return void
  */
-function loadPartial($name) {
+function loadPartial(string $name): void
+{
     $file = basePath("app/views/partials/$name.php");
-    if(file_exists($file)) {
+    if (file_exists($file)) {
         require $file;
-    }else {
+    } else {
         echo "Partial '$name' not found!";
     }
 }
@@ -51,7 +56,8 @@ function loadPartial($name) {
  * @param mixed $value
  * @return void
  */
-function d($value) {
+function d(mixed $value): void
+{
     echo "<pre style='background-color: black; color: lime; padding: 10px;'>";
     var_dump($value);
     echo "</pre>";
@@ -65,13 +71,15 @@ function d($value) {
  * @param mixed $value
  * @return void
  */
-function dd($value) {
+function dd(mixed $value): void
+{
     d($value);
     die;
 }
 
 
 
-function esc(string $value): string {
+function esc(string $value): string
+{
     return htmlspecialchars($value, ENT_QUOTES, "UTF-8", true);
 }

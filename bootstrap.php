@@ -1,5 +1,5 @@
 <?php
 
 require "helpers.php";
-require "core/Router.php";
-require "app/routes.php";
+require basePath("core/Router.php");
+require basePath("app/config/routes.php");
