@@ -69,3 +69,9 @@ function dd($value) {
     d($value);
     die;
 }
+
+
+
+function esc(string $value): string {
+    return htmlspecialchars($value, ENT_QUOTES, "UTF-8", true);
+}

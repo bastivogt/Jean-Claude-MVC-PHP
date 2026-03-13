@@ -46,19 +46,6 @@ class Router {
         $this->registerRoute("DELETE", $uri, $controller);
     }
 
-    protected function getParams(string $reqUri, string $routeUri) {
-        $params = [];
-        if($reqUri === $routeUri) {
-            return $params;
-        }
-        $position = 0;
-        $routeUriArray = explode("/", $routeUri);
-        $reqUriArry = explode("/", $reqUri);
-
-        d($reqUriArry);
-        dd($routeUriArray);
-    }
-
     protected function executeController(string $controller, array $params = []) {
         $arr = explode("@", $controller);
         if(class_exists($arr[0])) {
@@ -72,7 +59,7 @@ class Router {
         }
     }
 
-    protected function matchRoute($routeUri, $reqUri) {
+    protected function matchRoute(string $routeUri, string $reqUri): array|bool {
         $routeA = explode("/", trim($routeUri, "/"));
         $reqA = explode("/", trim($reqUri, "/"));
         $pos = false;
@@ -82,6 +69,7 @@ class Router {
             return false;
         }
         for($i = 0; $i < count($routeA); $i ++) {
+            
             if(str_starts_with($routeA[$i], ":")) {
                 $pos = $i;
                 break;
@@ -96,7 +84,7 @@ class Router {
             
             
         }
-        d($params);
+        // d($params);
         return [
             $match,
             $params
@@ -114,46 +102,24 @@ class Router {
     //     return false;
     // }
 
-    public function checkRoute($reqUri, $routeUri) {
-        // $reqUriArray = explode("/", trim($reqUri, "/"));
-        // $routeUriArray = explode("/", trim($routeUri, "/"));
-        $routeUriArray = explode(":", trim($routeUri, "/"));
-        dd($routeUri);
-        dd($routeUriArray);
-    }
-
-    public function getRoute(string $method, string $uri): array|bool {
-        foreach($this->routes as $route) {
-
-            //$this->checkRoute($uri, $route["uri"]);
-            if($route["method"] === $method && $route["uri"] === $uri) {
-                return $route;
-            }
-        }
-        return false;
-    }
-
-    public function accessQuery(string $method, string $uri) {
-        $route = $this->getRoute($method, $uri);
-        if($route) {
-            $params = $this->getParams($uri, $route["uri"]);
-            $this->executeController($route["controller"], $params);
-            //require basePath($route["controller"]);
-            return;
-        }
-        $this->error(404);
-        return;
-    }
 
 
-    public function execute($method, $uri) {
+
+
+
+
+
+    public function execute(string $method, string $uri): mixed {
         $params = false;
         $currentRoute = false;
         foreach($this->routes as $route) {
-            $params = $this->matchRoute($route["uri"], $uri);
-            if($params[0] === true) {
-                $currentRoute = $route;
-                break;
+            if($route["method"] === strtoupper($method)) {
+                $params = $this->matchRoute($route["uri"], $uri);
+                if($params[0] === true) {
+                    $currentRoute = $route;
+                    break;
+                }
+
             }
         }
         if($currentRoute) {
@@ -163,8 +129,8 @@ class Router {
     }
 
 
-    public function getRoutes() {
-        return $this->routes;
+    public function getRoutes(): array {
+        return [...$this->routes];
     }
 
 }

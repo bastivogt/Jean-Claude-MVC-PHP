@@ -5,7 +5,7 @@ class HomeController {
 
     public function index() {
         return view("home/index", [
-            "title" => "HomeController#index"
+            "title" => "<h1>HomeController#index</h1>"
         ]);
     }
 

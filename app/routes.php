@@ -1,6 +1,5 @@
 <?php
 
-//require_once basePath("app/controllers/HomeController.php");
 require_once basePath("app/controllers/HomeController.php");
 
 $router = new Router();
